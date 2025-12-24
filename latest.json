@@ -1,0 +1,449 @@
+{
+  "generated_at": "2025-12-24T21:11:17.183419",
+  "model_version": "20251224_211111",
+  "n_games": 5,
+  "games": [
+    {
+      "game_id": "d1",
+      "home": "Auburn",
+      "away": "Ohio State",
+      "predictions": {
+        "win_prob": 0.8451,
+        "margin": 11.1,
+        "total": 145.3
+      },
+      "market": {
+        "spread": -10.5,
+        "total": 148.5
+      },
+      "value_bets": [
+        {
+          "bet_type": "ML",
+          "side": "HOME",
+          "bet": "Auburn ML",
+          "odds": -450,
+          "model_prob": 0.8451,
+          "fair_prob": 0.7864,
+          "edge": 0.0587,
+          "ev_pct": 3.29,
+          "kelly": 0.037,
+          "confidence": "MEDIUM"
+        },
+        {
+          "bet_type": "TOTAL",
+          "side": "UNDER",
+          "bet": "Under 148.5",
+          "odds": -110,
+          "line": 148.5,
+          "model_prob": 0.605,
+          "fair_prob": 0.5,
+          "edge": 0.105,
+          "ev_pct": 15.51,
+          "kelly": 0.0426,
+          "confidence": "HIGH"
+        }
+      ]
+    },
+    {
+      "game_id": "d2",
+      "home": "Duke",
+      "away": "NC State",
+      "predictions": {
+        "win_prob": 0.7803,
+        "margin": 11.5,
+        "total": 144.4
+      },
+      "market": {
+        "spread": -13.5,
+        "total": 152.5
+      },
+      "value_bets": [
+        {
+          "bet_type": "ML",
+          "side": "AWAY",
+          "bet": "NC State ML",
+          "odds": 475,
+          "model_prob": 0.2197,
+          "fair_prob": 0.1671,
+          "edge": 0.0526,
+          "ev_pct": 26.33,
+          "kelly": 0.0139,
+          "confidence": "MEDIUM"
+        },
+        {
+          "bet_type": "SPREAD",
+          "side": "AWAY",
+          "bet": "NC State +13.5",
+          "odds": -112,
+          "line": 13.5,
+          "model_prob": 0.5731,
+          "fair_prob": 0.5043,
+          "edge": 0.0688,
+          "ev_pct": 8.48,
+          "kelly": 0.0237,
+          "confidence": "HIGH"
+        },
+        {
+          "bet_type": "TOTAL",
+          "side": "UNDER",
+          "bet": "Under 152.5",
+          "odds": -115,
+          "line": 152.5,
+          "model_prob": 0.7506,
+          "fair_prob": 0.5108,
+          "edge": 0.2398,
+          "ev_pct": 40.33,
+          "kelly": 0.05,
+          "confidence": "HIGH"
+        }
+      ]
+    },
+    {
+      "game_id": "d3",
+      "home": "Kansas",
+      "away": "Missouri",
+      "predictions": {
+        "win_prob": 0.7508,
+        "margin": 9.6,
+        "total": 145.6
+      },
+      "market": {
+        "spread": -14.5,
+        "total": 150.5
+      },
+      "value_bets": [
+        {
+          "bet_type": "ML",
+          "side": "AWAY",
+          "bet": "Missouri ML",
+          "odds": 500,
+          "model_prob": 0.2492,
+          "fair_prob": 0.16,
+          "edge": 0.0892,
+          "ev_pct": 49.54,
+          "kelly": 0.0248,
+          "confidence": "HIGH"
+        },
+        {
+          "bet_type": "SPREAD",
+          "side": "AWAY",
+          "bet": "Missouri +14.5",
+          "odds": -110,
+          "line": 14.5,
+          "model_prob": 0.6715,
+          "fair_prob": 0.5,
+          "edge": 0.1715,
+          "ev_pct": 28.2,
+          "kelly": 0.05,
+          "confidence": "HIGH"
+        },
+        {
+          "bet_type": "TOTAL",
+          "side": "UNDER",
+          "bet": "Under 150.5",
+          "odds": -110,
+          "line": 150.5,
+          "model_prob": 0.6581,
+          "fair_prob": 0.5,
+          "edge": 0.1581,
+          "ev_pct": 25.64,
+          "kelly": 0.05,
+          "confidence": "HIGH"
+        }
+      ]
+    },
+    {
+      "game_id": "d4",
+      "home": "Florida",
+      "away": "North Carolina",
+      "predictions": {
+        "win_prob": 0.7508,
+        "margin": 9.1,
+        "total": 144.4
+      },
+      "market": {
+        "spread": -5.5,
+        "total": 155.5
+      },
+      "value_bets": [
+        {
+          "bet_type": "ML",
+          "side": "HOME",
+          "bet": "Florida ML",
+          "odds": -225,
+          "model_prob": 0.7508,
+          "fair_prob": 0.6636,
+          "edge": 0.0871,
+          "ev_pct": 8.44,
+          "kelly": 0.0475,
+          "confidence": "HIGH"
+        },
+        {
+          "bet_type": "SPREAD",
+          "side": "HOME",
+          "bet": "Florida -5.5",
+          "odds": -110,
+          "line": -5.5,
+          "model_prob": 0.6292,
+          "fair_prob": 0.5,
+          "edge": 0.1292,
+          "ev_pct": 20.13,
+          "kelly": 0.05,
+          "confidence": "HIGH"
+        },
+        {
+          "bet_type": "TOTAL",
+          "side": "UNDER",
+          "bet": "Under 155.5",
+          "odds": -110,
+          "line": 155.5,
+          "model_prob": 0.8216,
+          "fair_prob": 0.5,
+          "edge": 0.3216,
+          "ev_pct": 56.85,
+          "kelly": 0.05,
+          "confidence": "HIGH"
+        }
+      ]
+    },
+    {
+      "game_id": "d5",
+      "home": "Oregon",
+      "away": "UCLA",
+      "predictions": {
+        "win_prob": 0.7508,
+        "margin": 7.6,
+        "total": 144.9
+      },
+      "market": {
+        "spread": 2.5,
+        "total": 146.5
+      },
+      "value_bets": [
+        {
+          "bet_type": "ML",
+          "side": "HOME",
+          "bet": "Oregon ML",
+          "odds": 125,
+          "model_prob": 0.7508,
+          "fair_prob": 0.4289,
+          "edge": 0.3219,
+          "ev_pct": 68.92,
+          "kelly": 0.05,
+          "confidence": "HIGH"
+        },
+        {
+          "bet_type": "SPREAD",
+          "side": "HOME",
+          "bet": "Oregon +2.5",
+          "odds": -110,
+          "line": 2.5,
+          "model_prob": 0.8209,
+          "fair_prob": 0.5,
+          "edge": 0.3209,
+          "ev_pct": 56.72,
+          "kelly": 0.05,
+          "confidence": "HIGH"
+        },
+        {
+          "bet_type": "TOTAL",
+          "side": "UNDER",
+          "bet": "Under 146.5",
+          "odds": -110,
+          "line": 146.5,
+          "model_prob": 0.554,
+          "fair_prob": 0.5,
+          "edge": 0.054,
+          "ev_pct": 5.75,
+          "kelly": 0.0158,
+          "confidence": "MEDIUM"
+        }
+      ]
+    }
+  ],
+  "summary": {
+    "total_value_bets": 14,
+    "high_confidence": 11,
+    "medium_confidence": 3,
+    "low_confidence": 0
+  },
+  "top_plays": [
+    {
+      "bet_type": "ML",
+      "side": "HOME",
+      "bet": "Oregon ML",
+      "odds": 125,
+      "model_prob": 0.7508,
+      "fair_prob": 0.4289,
+      "edge": 0.3219,
+      "ev_pct": 68.92,
+      "kelly": 0.05,
+      "confidence": "HIGH"
+    },
+    {
+      "bet_type": "TOTAL",
+      "side": "UNDER",
+      "bet": "Under 155.5",
+      "odds": -110,
+      "line": 155.5,
+      "model_prob": 0.8216,
+      "fair_prob": 0.5,
+      "edge": 0.3216,
+      "ev_pct": 56.85,
+      "kelly": 0.05,
+      "confidence": "HIGH"
+    },
+    {
+      "bet_type": "SPREAD",
+      "side": "HOME",
+      "bet": "Oregon +2.5",
+      "odds": -110,
+      "line": 2.5,
+      "model_prob": 0.8209,
+      "fair_prob": 0.5,
+      "edge": 0.3209,
+      "ev_pct": 56.72,
+      "kelly": 0.05,
+      "confidence": "HIGH"
+    },
+    {
+      "bet_type": "TOTAL",
+      "side": "UNDER",
+      "bet": "Under 152.5",
+      "odds": -115,
+      "line": 152.5,
+      "model_prob": 0.7506,
+      "fair_prob": 0.5108,
+      "edge": 0.2398,
+      "ev_pct": 40.33,
+      "kelly": 0.05,
+      "confidence": "HIGH"
+    },
+    {
+      "bet_type": "SPREAD",
+      "side": "AWAY",
+      "bet": "Missouri +14.5",
+      "odds": -110,
+      "line": 14.5,
+      "model_prob": 0.6715,
+      "fair_prob": 0.5,
+      "edge": 0.1715,
+      "ev_pct": 28.2,
+      "kelly": 0.05,
+      "confidence": "HIGH"
+    },
+    {
+      "bet_type": "TOTAL",
+      "side": "UNDER",
+      "bet": "Under 150.5",
+      "odds": -110,
+      "line": 150.5,
+      "model_prob": 0.6581,
+      "fair_prob": 0.5,
+      "edge": 0.1581,
+      "ev_pct": 25.64,
+      "kelly": 0.05,
+      "confidence": "HIGH"
+    },
+    {
+      "bet_type": "SPREAD",
+      "side": "HOME",
+      "bet": "Florida -5.5",
+      "odds": -110,
+      "line": -5.5,
+      "model_prob": 0.6292,
+      "fair_prob": 0.5,
+      "edge": 0.1292,
+      "ev_pct": 20.13,
+      "kelly": 0.05,
+      "confidence": "HIGH"
+    },
+    {
+      "bet_type": "TOTAL",
+      "side": "UNDER",
+      "bet": "Under 148.5",
+      "odds": -110,
+      "line": 148.5,
+      "model_prob": 0.605,
+      "fair_prob": 0.5,
+      "edge": 0.105,
+      "ev_pct": 15.51,
+      "kelly": 0.0426,
+      "confidence": "HIGH"
+    },
+    {
+      "bet_type": "ML",
+      "side": "AWAY",
+      "bet": "Missouri ML",
+      "odds": 500,
+      "model_prob": 0.2492,
+      "fair_prob": 0.16,
+      "edge": 0.0892,
+      "ev_pct": 49.54,
+      "kelly": 0.0248,
+      "confidence": "HIGH"
+    },
+    {
+      "bet_type": "ML",
+      "side": "HOME",
+      "bet": "Florida ML",
+      "odds": -225,
+      "model_prob": 0.7508,
+      "fair_prob": 0.6636,
+      "edge": 0.0871,
+      "ev_pct": 8.44,
+      "kelly": 0.0475,
+      "confidence": "HIGH"
+    },
+    {
+      "bet_type": "SPREAD",
+      "side": "AWAY",
+      "bet": "NC State +13.5",
+      "odds": -112,
+      "line": 13.5,
+      "model_prob": 0.5731,
+      "fair_prob": 0.5043,
+      "edge": 0.0688,
+      "ev_pct": 8.48,
+      "kelly": 0.0237,
+      "confidence": "HIGH"
+    },
+    {
+      "bet_type": "ML",
+      "side": "HOME",
+      "bet": "Auburn ML",
+      "odds": -450,
+      "model_prob": 0.8451,
+      "fair_prob": 0.7864,
+      "edge": 0.0587,
+      "ev_pct": 3.29,
+      "kelly": 0.037,
+      "confidence": "MEDIUM"
+    },
+    {
+      "bet_type": "TOTAL",
+      "side": "UNDER",
+      "bet": "Under 146.5",
+      "odds": -110,
+      "line": 146.5,
+      "model_prob": 0.554,
+      "fair_prob": 0.5,
+      "edge": 0.054,
+      "ev_pct": 5.75,
+      "kelly": 0.0158,
+      "confidence": "MEDIUM"
+    },
+    {
+      "bet_type": "ML",
+      "side": "AWAY",
+      "bet": "NC State ML",
+      "odds": 475,
+      "model_prob": 0.2197,
+      "fair_prob": 0.1671,
+      "edge": 0.0526,
+      "ev_pct": 26.33,
+      "kelly": 0.0139,
+      "confidence": "MEDIUM"
+    }
+  ]
+}
