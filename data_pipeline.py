@@ -4,11 +4,12 @@
 NCAA College Basketball Predictive Model - Data Pipeline
 ================================================================================
 
-Data fetching, team database, and syndicate data integration.
+Data fetching from KenPom/Barttorvik and syndicate data integration.
 
 ================================================================================
 """
 
+import os
 import numpy as np
 import pandas as pd
 from typing import Dict, List, Optional, Tuple
@@ -20,27 +21,96 @@ import json
 
 from config import ODDS_API_KEY, DATA_DIR, syndicate_config
 
+# Import KenPom client
+try:
+    from kenpom_client import LiveTeamDatabase, KenPomClient
+    KENPOM_AVAILABLE = True
+except ImportError:
+    KENPOM_AVAILABLE = False
+
 
 # =============================================================================
-# TEAM DATABASE
+# TEAM DATABASE - Uses Live KenPom/Barttorvik Data
 # =============================================================================
 class TeamDatabase:
     """
-    In-memory team ratings database with KenPom-style metrics.
+    Team ratings database using LIVE data from KenPom or Barttorvik.
 
-    In production, this would pull from a real database or API.
+    Data Sources (in order of priority):
+    1. KenPom.com (if KENPOM_EMAIL and KENPOM_PASSWORD set)
+    2. Barttorvik.com (free fallback with same metrics)
+    3. Cached data (if network unavailable)
     """
 
     def __init__(self):
-        self.teams = self._build_team_database()
+        # Get KenPom credentials from environment
+        kenpom_email = os.environ.get('KENPOM_EMAIL')
+        kenpom_password = os.environ.get('KENPOM_PASSWORD')
 
-    def _build_team_database(self) -> Dict[str, Dict]:
-        """Build team database with realistic ratings"""
+        if KENPOM_AVAILABLE:
+            self._live_db = LiveTeamDatabase(
+                kenpom_email=kenpom_email,
+                kenpom_password=kenpom_password
+            )
+            self._use_live = True
+            print(f"TeamDatabase: Using LIVE data (KenPom: {bool(kenpom_email)})")
+        else:
+            self._live_db = None
+            self._use_live = False
+            print("TeamDatabase: KenPom client not available, using fallback")
+
+        self._fallback_teams = None
+
+    @property
+    def teams(self) -> Dict[str, Dict]:
+        """Get all team ratings."""
+        if self._use_live and self._live_db:
+            return self._live_db.teams
+        return self._get_fallback_teams()
+
+    def get(self, team: str) -> Optional[Dict]:
+        """Get team stats by name (with fuzzy matching)."""
+        if self._use_live and self._live_db:
+            result = self._live_db.get(team)
+            if result:
+                return result
+
+        # Fallback to local data
+        return self._get_from_fallback(team)
+
+    def refresh(self):
+        """Force refresh of team data from source."""
+        if self._use_live and self._live_db:
+            self._live_db.refresh()
+            print("Team ratings refreshed from live source")
+
+    def _get_fallback_teams(self) -> Dict[str, Dict]:
+        """Get fallback team data (used if live fetch fails)."""
+        if self._fallback_teams is None:
+            self._fallback_teams = self._build_fallback_database()
+        return self._fallback_teams
+
+    def _get_from_fallback(self, team: str) -> Optional[Dict]:
+        """Get team from fallback database."""
+        fallback = self._get_fallback_teams()
+
+        if team in fallback:
+            return fallback[team]
+
+        # Fuzzy match
+        team_lower = team.lower()
+        for name, stats in fallback.items():
+            if name.lower() in team_lower or team_lower in name.lower():
+                return stats
+
+        return None
+
+    def _build_fallback_database(self) -> Dict[str, Dict]:
+        """Build fallback team database (only used if live data unavailable)."""
         teams = {}
 
-        # Top 25 + Other major teams with realistic stats
+        # Top teams with approximate ratings
         team_data = [
-            # (name, adj_em, adj_o, adj_d, tempo, rank)
             ('Auburn', 28.5, 118.2, 89.7, 67.5, 1),
             ('Duke', 26.8, 120.1, 93.3, 70.2, 2),
             ('Tennessee', 25.9, 114.8, 88.9, 65.1, 3),
@@ -66,7 +136,6 @@ class TeamDatabase:
             ('Baylor', 15.8, 110.9, 95.1, 66.2, 23),
             ('St. John\'s', 15.4, 112.8, 97.4, 67.8, 24),
             ('Ole Miss', 15.0, 109.5, 94.5, 65.4, 25),
-            # Additional teams
             ('Ohio State', 12.5, 108.2, 95.7, 66.5, 35),
             ('NC State', 8.5, 105.8, 97.3, 67.2, 55),
             ('Missouri', 6.2, 103.5, 97.3, 68.8, 72),
@@ -85,49 +154,27 @@ class TeamDatabase:
         ]
 
         for name, adj_em, adj_o, adj_d, tempo, rank in team_data:
-            teams[name] = self._create_team_stats(name, adj_em, adj_o, adj_d, tempo, rank)
+            quality = adj_em / 30
+            teams[name] = {
+                'name': name,
+                'adj_em': adj_em,
+                'adj_o': adj_o,
+                'adj_d': adj_d,
+                'adj_t': tempo,
+                'rank': rank,
+                'efg_o': np.clip(0.51 + quality * 0.03, 0.44, 0.58),
+                'efg_d': np.clip(0.50 - quality * 0.02, 0.44, 0.56),
+                'tov_o': np.clip(0.17 - quality * 0.015, 0.12, 0.24),
+                'tov_d': np.clip(0.17 + quality * 0.012, 0.12, 0.24),
+                'orb_o': np.clip(0.29 + quality * 0.015, 0.22, 0.36),
+                'drb_d': np.clip(0.73 + quality * 0.012, 0.66, 0.80),
+                'ftr_o': np.clip(0.32 + quality * 0.015, 0.22, 0.42),
+                'ftr_d': np.clip(0.30 - quality * 0.012, 0.22, 0.40),
+                'sos': quality * 3,
+                'luck': 0,
+            }
 
         return teams
-
-    def _create_team_stats(self, name: str, adj_em: float, adj_o: float,
-                           adj_d: float, tempo: float, rank: int) -> Dict:
-        """Create full team stats dictionary with four factors"""
-        # Derive four factors from efficiency ratings
-        quality = adj_em / 30  # Normalized quality (-1 to 1)
-
-        return {
-            'name': name,
-            'adj_em': adj_em,
-            'adj_o': adj_o,
-            'adj_d': adj_d,
-            'adj_t': tempo,
-            'rank': rank,
-            # Four factors (derived with some variance)
-            'efg_o': np.clip(0.51 + quality * 0.03 + np.random.normal(0, 0.01), 0.44, 0.58),
-            'efg_d': np.clip(0.50 - quality * 0.02 + np.random.normal(0, 0.01), 0.44, 0.56),
-            'tov_o': np.clip(0.17 - quality * 0.015 + np.random.normal(0, 0.01), 0.12, 0.24),
-            'tov_d': np.clip(0.17 + quality * 0.012 + np.random.normal(0, 0.01), 0.12, 0.24),
-            'orb_o': np.clip(0.29 + quality * 0.015 + np.random.normal(0, 0.015), 0.22, 0.36),
-            'drb_d': np.clip(0.73 + quality * 0.012 + np.random.normal(0, 0.015), 0.66, 0.80),
-            'ftr_o': np.clip(0.32 + quality * 0.015 + np.random.normal(0, 0.02), 0.22, 0.42),
-            'ftr_d': np.clip(0.30 - quality * 0.012 + np.random.normal(0, 0.02), 0.22, 0.40),
-            # Advanced
-            'sos': quality * 3 + np.random.normal(0, 1.5),
-            'luck': np.random.normal(0, 0.025),
-        }
-
-    def get(self, team: str) -> Optional[Dict]:
-        """Get team stats by name (fuzzy matching)"""
-        if team in self.teams:
-            return self.teams[team]
-
-        # Try fuzzy match
-        team_lower = team.lower()
-        for name, stats in self.teams.items():
-            if name.lower() in team_lower or team_lower in name.lower():
-                return stats
-
-        return None
 
 
 # =============================================================================

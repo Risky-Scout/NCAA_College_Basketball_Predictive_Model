@@ -8,6 +8,8 @@ on:
 
 env:
   ODDS_API_KEY: ${{ secrets.ODDS_API_KEY }}
+  KENPOM_EMAIL: ${{ secrets.KENPOM_EMAIL }}
+  KENPOM_PASSWORD: ${{ secrets.KENPOM_PASSWORD }}
 
 jobs:
   train:
