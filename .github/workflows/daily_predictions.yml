@@ -12,56 +12,70 @@ env:
 jobs:
   predict:
     runs-on: ubuntu-latest
-    
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           fetch-depth: 0
-      
+
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
           python-version: '3.11'
           cache: 'pip'
-      
+
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
-      
+
       - name: Generate predictions
-        run: python src/predict.py
-      
-      - name: Generate WizardofOdds feed
-        run: python src/generate_feed.py
-      
+        run: python predict.py
+
       - name: Commit predictions
         run: |
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
-          
+
           # Add prediction files
           git add predictions/
-          
+
           # Check if there are changes to commit
           if git diff --staged --quiet; then
             echo "No new predictions to commit"
           else
-            git commit -m "🏀 Daily predictions - $(date +'%Y-%m-%d')"
+            git commit -m "Daily predictions - $(date +'%Y-%m-%d')"
             git push
           fi
-      
+
       - name: Upload prediction artifacts
         uses: actions/upload-artifact@v4
         with:
           name: predictions-${{ github.run_number }}
           path: predictions/
           retention-days: 90
-      
+
       - name: Post summary to job
         run: |
-          echo "## 🏀 Today's Predictions Summary" >> $GITHUB_STEP_SUMMARY
+          echo "## Today's Predictions Summary" >> $GITHUB_STEP_SUMMARY
           echo "" >> $GITHUB_STEP_SUMMARY
-          python src/summary.py >> $GITHUB_STEP_SUMMARY
+          if [ -f predictions/latest.json ]; then
+            echo "### Value Bets Found" >> $GITHUB_STEP_SUMMARY
+            python -c "
+          import json
+          with open('predictions/latest.json') as f:
+              data = json.load(f)
+          print(f\"- Total: {data['summary']['total_value_bets']}\")
+          print(f\"- HIGH confidence: {data['summary']['high_confidence']}\")
+          print(f\"- MEDIUM confidence: {data['summary']['medium_confidence']}\")
+          if data.get('syndicate_enabled'):
+              print(f\"\\n### Syndicate Signals\")
+              print(f\"- Steam moves: {data['summary'].get('steam_moves_detected', 0)}\")
+              print(f\"- RLM signals: {data['summary'].get('rlm_signals', 0)}\")
+              print(f\"- Injury edges: {data['summary'].get('injury_edges', 0)}\")
+          " >> $GITHUB_STEP_SUMMARY
+          else
+            echo "No predictions generated" >> $GITHUB_STEP_SUMMARY
+          fi
