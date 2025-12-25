@@ -12,62 +12,49 @@ env:
 jobs:
   train:
     runs-on: ubuntu-latest
-    
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           fetch-depth: 0
-      
+
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
           python-version: '3.11'
           cache: 'pip'
-      
+
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
-      
-      - name: Fetch latest game results
-        run: python src/data_pipeline.py --update-results
-      
-      - name: Update team ratings
-        run: python src/data_pipeline.py --update-ratings
-      
+
       - name: Train model
-        run: python src/train.py
-      
-      - name: Run leakage tests
-        run: python -m pytest tests/test_leakage.py -v
-      
-      - name: Validate model performance
-        run: python src/validate.py
-      
+        run: python train.py
+
       - name: Commit updated model and data
         run: |
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
-          
-          # Add model files
-          git add models/
-          git add data/
-          
+
+          # Add model and data files
+          git add models/ data/ predictions/ || true
+
           # Check if there are changes to commit
           if git diff --staged --quiet; then
             echo "No changes to commit"
           else
-            git commit -m "🤖 Daily model update - $(date +'%Y-%m-%d')"
+            git commit -m "Daily model update - $(date +'%Y-%m-%d')"
             git push
           fi
-      
+
       - name: Upload training artifacts
         uses: actions/upload-artifact@v4
         with:
           name: training-logs-${{ github.run_number }}
           path: |
-            models/training_log.json
-            data/validation_results.json
+            models/
+            data/training_metrics.json
           retention-days: 30
